@@ -98,7 +98,7 @@ namespace ClientPlugin
 
             // The currently selected camera block or null if no camera is active
             var currentCamera = cameraSystem.CurrentCamera;
-            var nextCameraIndex = currentCamera == null ? 0 : cameras.FindIndex(c => c.EntityId == currentCamera.EntityId) + 1;
+            var nextCameraIndex = currentCamera == null ? 0 : cameras.FindIndex(c => c == currentCamera) + 1;
 
             // Select the next working camera
             for (var i = 0; i < cameras.Count; i++)
