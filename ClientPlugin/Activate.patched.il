@@ -1,4 +1,4 @@
-// 485d08e8
+// 2a30f87f
 ldarg.0
 call VRage.Collections.ListReader`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetBlocks()
 stloc.1
@@ -41,42 +41,9 @@ constrained. System.Collections.Generic.List`1+Enumerator[Sandbox.Game.Entities.
 callvirt abstract virtual System.Void System.IDisposable::Dispose()
 [EX_EndException]
 endfinally
-ldloc.3
-call static System.Boolean ClientPlugin.ActivatePatch::HandleCameraGroup(System.Collections.Generic.List`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> terminalBlocks)
-brfalse L3
-ldc.i4.1
-ret
 L3:
 ldloc.3
-callvirt System.Collections.Generic.Enumerator<Sandbox.Game.Entities.Cube.MyTerminalBlock> System.Collections.Generic.List`1<Sandbox.Game.Entities.Cube.MyTerminalBlock>::GetEnumerator()
-stloc.s 4 (System.Collections.Generic.List`1+Enumerator[Sandbox.Game.Entities.Cube.MyTerminalBlock])
-[EX_BeginException]
-br.s L4
-L7:
-ldloca.s 4 (System.Collections.Generic.List`1+Enumerator[Sandbox.Game.Entities.Cube.MyTerminalBlock])
-call virtual Sandbox.Game.Entities.Cube.MyTerminalBlock System.Collections.Generic.Enumerator<Sandbox.Game.Entities.Cube.MyTerminalBlock>::get_Current()
-stloc.s 6 (Sandbox.Game.Entities.Cube.MyTerminalBlock)
-ldloc.s 6 (Sandbox.Game.Entities.Cube.MyTerminalBlock)
-brfalse.s L5
-ldloc.s 6 (Sandbox.Game.Entities.Cube.MyTerminalBlock)
-callvirt virtual System.Boolean Sandbox.Game.Entities.MyCubeBlock::get_IsFunctional()
-brfalse.s L6
-ldloc.2
-ldloc.s 6 (Sandbox.Game.Entities.Cube.MyTerminalBlock)
-callvirt abstract virtual System.Void Sandbox.Game.Gui.ITerminalAction::Apply(Sandbox.Game.Entities.Cube.MyTerminalBlock block)
-L4:
-L5:
-L6:
-ldloca.s 4 (System.Collections.Generic.List`1+Enumerator[Sandbox.Game.Entities.Cube.MyTerminalBlock])
-call virtual System.Boolean System.Collections.Generic.Enumerator<Sandbox.Game.Entities.Cube.MyTerminalBlock>::MoveNext()
-brtrue.s L7
-leave.s L8
-[EX_BeginFinally]
-ldloca.s 4 (System.Collections.Generic.List`1+Enumerator[Sandbox.Game.Entities.Cube.MyTerminalBlock])
-constrained. System.Collections.Generic.List`1+Enumerator[Sandbox.Game.Entities.Cube.MyTerminalBlock]
-callvirt abstract virtual System.Void System.IDisposable::Dispose()
-[EX_EndException]
-endfinally
+call static System.Void ClientPlugin.ActivatePatch::HandleCameraGroup(System.Collections.Generic.List`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> terminalBlocks)
 L8:
 ldc.i4.1
 ret

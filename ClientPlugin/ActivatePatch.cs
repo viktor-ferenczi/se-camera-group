@@ -11,20 +11,21 @@ using VRage.Utils;
 namespace ClientPlugin
 {
     [HarmonyPatch]
+    [HarmonyDebug]
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     public static class ActivatePatch
     {
         private static MethodBase TargetMethod()
         {
-            var cls = Type.GetType("Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup, Sandbox.Game, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+            var cls = AccessTools.TypeByName("Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup");
             if (cls == null)
             {
                 MyLog.Default.Error($"{Plugin.Name}: Cannot find class MyToolbarItemTerminalGroup");
                 return null;
             }
 
-            var method = AccessTools.GetDeclaredMethods(cls).FirstOrDefault(m => m.Name == "Activate");
+            var method = AccessTools.Method(cls, "Activate");
             if (method == null)
             {
                 MyLog.Default.Error($"{Plugin.Name}: Cannot find method MyToolbarItemTerminalGroup.Activate");
@@ -48,26 +49,25 @@ namespace ClientPlugin
                 return il;
             }
 
-            // Find the last foreach loop:
+            // Entirely remove the second foreach loop, except of loading the list variable:
             // foreach (MyTerminalBlock block in myTerminalBlockList)
-            var i = il.FindLastIndex(c => c.opcode == OpCodes.Ldloc_3);
-            var skip = il[i].labels[0];
+            var i = il.FindLastIndex(c => c.opcode == OpCodes.Ldloc_3) + 1;
+            var j = il.FindLastIndex(c => c.opcode == OpCodes.Ldc_I4_1);
+            il.RemoveRange(i, j - i);
 
-            // Insert call to static method, return with true if the static method returns true
-            il.Insert(i++, new CodeInstruction(OpCodes.Ldloc_3));
-            il.Insert(i++, new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(ActivatePatch), nameof(HandleCameraGroup))));
-            il.Insert(i++, new CodeInstruction(OpCodes.Brfalse, operand: skip));
-            il.Insert(i++, new CodeInstruction(OpCodes.Ldc_I4_1));
-            il.Insert(i, new CodeInstruction(OpCodes.Ret));
+            // Inject a static method call instead
+            var handleCameraGroupMethodInfo = AccessTools.DeclaredMethod(typeof(ActivatePatch), nameof(HandleCameraGroup));
+            il.Insert(i, new CodeInstruction(OpCodes.Call, handleCameraGroupMethodInfo));
 
             il.RecordPatchedCode();
             return il;
         }
 
-        public static bool HandleCameraGroup(List<MyTerminalBlock> terminalBlocks)
+        public static void HandleCameraGroup(List<MyTerminalBlock> terminalBlocks)
         {
+            throw new Exception("HELL");
             MyLog.Default.Info($"{Plugin.Name}: HandleCameraGroup()");
-            return true;
+            // return true;
         }
     }
 }

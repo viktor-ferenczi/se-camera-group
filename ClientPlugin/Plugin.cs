@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using HarmonyLib;
 using VRage.Plugins;
@@ -6,7 +7,8 @@ using VRage.Plugins;
 namespace ClientPlugin
 {
     // ReSharper disable once UnusedType.Global
-    public class Plugin : IPlugin, IDisposable
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    public class Plugin : IPlugin
     {
         public const string Name = "CameraGroup";
         public static Plugin Instance { get; private set; }
