@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using HarmonyLib;
 using VRage.Plugins;
@@ -12,7 +11,6 @@ namespace ClientPlugin
     {
         public const string Name = "CameraGroup";
         public static Plugin Instance { get; private set; }
-        private static bool initialized;
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         public void Init(object gameInstance)
@@ -32,15 +30,6 @@ namespace ClientPlugin
         }
 
         public void Update()
-        {
-            if (!initialized)
-            {
-                Initialize();
-                initialized = true;
-            }
-        }
-
-        private void Initialize()
         {
         }
 

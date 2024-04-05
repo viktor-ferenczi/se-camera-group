@@ -14,8 +14,10 @@ using VRage.Utils;
 
 namespace ClientPlugin
 {
-    [HarmonyPatch]
+#if DEBUG
     [HarmonyDebug]
+#endif
+    [HarmonyPatch]
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     public static class ActivatePatch
