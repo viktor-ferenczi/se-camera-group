@@ -3,6 +3,8 @@
 Allows viewing groups of cameras in a round-robin manner 
 using only a single toolbar slot.
 
+Thanks goes to **mkaito** for the great plugin idea.
+
 ## Prerequisites
 
 - [Space Engineers](https://store.steampowered.com/app/244850/Space_Engineers/)
