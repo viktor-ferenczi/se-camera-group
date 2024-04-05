@@ -1,4 +1,4 @@
-// 2a30f87f
+// 534b0ccf
 ldarg.0
 call VRage.Collections.ListReader`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetBlocks()
 stloc.1
@@ -43,7 +43,8 @@ callvirt abstract virtual System.Void System.IDisposable::Dispose()
 endfinally
 L3:
 ldloc.3
-call static System.Void ClientPlugin.ActivatePatch::HandleCameraGroup(System.Collections.Generic.List`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> terminalBlocks)
+ldloc.2
+call static System.Void ClientPlugin.ActivatePatch::HandleCameraGroup(System.Collections.Generic.List`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> terminalBlocks, Sandbox.ModAPI.Interfaces.ITerminalAction action)
 L8:
 ldc.i4.1
 ret
