@@ -17,9 +17,7 @@ using only a single toolbar slot.
 
 ## Remarks
 
-- Cameras are always selected in the same order determined by their name
-- Broken cameras are automatically skipped from the rotation
-- The action becomes disabled if all the cameras are broken or missing or the group is deleted
+- Cameras are selected in the order of their name
+- Broken or disabled cameras are automatically skipped
 - The plugin works for both offline and online multiplayer games
-- Only those who have the client side plugin can use the camera group view action
-- While this toolbar action is not available in the game by default the save files and blueprints properly preserve it
+- Game saves and blueprints preserve the camera group view toolbar action
