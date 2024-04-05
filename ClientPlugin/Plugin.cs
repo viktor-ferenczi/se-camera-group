@@ -10,14 +10,14 @@ namespace ClientPlugin
     {
         public const string Name = "CameraGroup";
         public static Plugin Instance { get; private set; }
+        private static bool initialized;
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         public void Init(object gameInstance)
         {
             Instance = this;
 
-            // TODO: Put your one time initialization code here.
-            Harmony harmony = new Harmony(Name);
+            var harmony = new Harmony(Name);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
@@ -31,7 +31,15 @@ namespace ClientPlugin
 
         public void Update()
         {
-            // TODO: Put your update code here. It is called on every simulation frame!
+            if (!initialized)
+            {
+                Initialize();
+                initialized = true;
+            }
+        }
+
+        private void Initialize()
+        {
         }
 
         // TODO: Uncomment and use this method to create a plugin configuration dialog
