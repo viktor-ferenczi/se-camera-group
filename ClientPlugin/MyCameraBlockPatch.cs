@@ -1,34 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using HarmonyLib;
 using Sandbox.Game.Entities;
-using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Gui;
-using VRage.Utils;
 
 namespace ClientPlugin
 {
-    [HarmonyPatch]
+    [HarmonyPatch(typeof(MyCameraBlock))]
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class MyCameraBlockPatch
     {
-        private static MethodBase TargetMethod()
-        {
-            var cls = typeof(MyCameraBlock);
-
-            var method = AccessTools.Method(cls, "CreateTerminalControls");
-            if (method == null)
-            {
-                MyLog.Default.Error($"{Plugin.Name}: Cannot find method MyCameraBlock.CreateTerminalControls");
-                return null;
-            }
-
-            return method;
-        }
-
-        public static void Postfix()
+        [HarmonyPostfix]
+        [HarmonyPatch("CreateTerminalControls")]
+        public static void CreateTerminalControlsPostfix()
         {
             var terminalActions = new List<ITerminalAction>();
             MyTerminalControlFactory.GetActions(typeof(MyCameraBlock), terminalActions);
