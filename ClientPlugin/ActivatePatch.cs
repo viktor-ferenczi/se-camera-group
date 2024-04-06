@@ -72,8 +72,10 @@ namespace ClientPlugin
 
         public static void HandleCameraGroup(List<MyTerminalBlock> terminalBlocks, ITerminalAction action)
         {
-            // All cameras?
-            if (terminalBlocks.Count != 0 && terminalBlocks.All(block => block is IMyCameraBlock))
+            // All cameras & action == View
+            if (terminalBlocks.Count != 0 && 
+                terminalBlocks.All(block => block is IMyCameraBlock) &&
+                action.Name.ToString() == "View")
             {
                 SelectNextCamera(terminalBlocks, action);
                 return;
