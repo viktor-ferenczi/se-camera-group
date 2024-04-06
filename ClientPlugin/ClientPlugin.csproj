@@ -492,9 +492,9 @@
   <ItemGroup>
     <Compile Include="Hashing.cs" />
     <Compile Include="ActivatePatch.cs" />
+    <Compile Include="MyCameraBlockPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PluginSession.cs" />
     <Compile Include="TranspilerHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
