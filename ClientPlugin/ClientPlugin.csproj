@@ -497,6 +497,7 @@
     <Compile Include="Patches\MyTurretControlBlockPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\BlockExtensions.cs" />
     <Compile Include="Utils\Hashing.cs" />
     <Compile Include="Utils\TranspilerHelpers.cs" />
   </ItemGroup>

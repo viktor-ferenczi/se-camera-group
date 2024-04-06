@@ -6,10 +6,16 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using HarmonyLib;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
+using Sandbox.Game.Weapons;
+using Sandbox.Game.World;
 using Sandbox.ModAPI;
 using Sandbox.ModAPI.Interfaces;
+using SpaceEngineers.Game.Entities.Blocks;
+using VRage.Game.ModAPI.Interfaces;
 using VRage.Utils;
+using IMyControllableEntity = Sandbox.Game.Entities.IMyControllableEntity;
 
 namespace ClientPlugin
 {
@@ -68,10 +74,12 @@ namespace ClientPlugin
 
         public static void ApplyAction(List<MyTerminalBlock> terminalBlocks, ITerminalAction action)
         {
-            // All cameras & action == View
-            if (terminalBlocks.Count != 0 && 
-                terminalBlocks.All(block => block is IMyCameraBlock) &&
-                action.Id == "View")
+            // Is it a relevant action?
+            // All blocks in the group has a camera controller?
+            if (MySession.Static != null &&
+                (action.Id == "View" || action.Id == "Control") &&
+                terminalBlocks.Count != 0 &&
+                terminalBlocks.All(IsBlockWithCamera))
             {
                 SelectNextCamera(terminalBlocks, action);
                 return;
@@ -86,34 +94,97 @@ namespace ClientPlugin
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void SelectNextCamera(List<MyTerminalBlock> cameras, ITerminalAction action)
+        private static bool IsBlockWithCamera(MyTerminalBlock terminalBlock)
         {
-            // Sort the cameras by their name which the player can change
-            cameras.Sort((a, b) => a.CustomName.CompareTo(b.CustomName));
+            switch (terminalBlock)
+            {
+                case MyCameraBlock _:
+                case MyLargeTurretBase _:
+                case MySearchlight _:
+                case MyTurretControlBlock _:
+                    return true;
 
-            // Camera system
-            var cameraSystem = cameras[0].CubeGrid.GridSystems.CameraSystem;
+                default:
+                    return false;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IMyCameraController GetBlockCameraController(MyTerminalBlock terminalBlock)
+        {
+            switch (terminalBlock)
+            {
+                case MyCameraBlock cameraBlock:
+                    return cameraBlock;
+
+                case MyLargeTurretBase turretBase:
+                    return turretBase;
+
+                case MySearchlight searchlight:
+                    return searchlight;
+
+                case MyTurretControlBlock turretControlBlock:
+                    return turretControlBlock.GetCamera();
+
+                default:
+                    return null;
+            }
+        }
+
+        private static IMyCameraController lastActivatedCamera;
+        private static MyTerminalBlock lastActivatedBlock;
+
+        private static void SelectNextCamera(List<MyTerminalBlock> terminalBlocks, ITerminalAction action)
+        {
+            // Sort the blocks by their name which the player can change
+            terminalBlocks.Sort((a, b) => a.CustomName.CompareTo(b.CustomName));
+
+            // Get the camera controllers (may be null for turret controllers if the camera does not exist)
+            var cameras = terminalBlocks.Select(GetBlockCameraController).ToList();
 
             // The currently selected camera block or null if no camera is active
-            var currentCamera = cameraSystem.CurrentCamera;
-            var nextCameraIndex = currentCamera == null ? 0 : cameras.FindIndex(c => c == currentCamera) + 1;
+            var current = MySession.Static.CameraController;
+            var index = current == null ? -1 : cameras.FindIndex(c => c == current);
 
             // Select the next working camera
-            for (var i = 0; i < cameras.Count; i++)
+            for (var attempt = 0; attempt < cameras.Count; attempt++)
             {
-                nextCameraIndex %= cameras.Count;
-                var camera = cameras[nextCameraIndex];
+                // Next block with wrap around
+                index = (index + 1) % cameras.Count;
 
-                if (camera.IsWorking)
+                var camera = cameras[index];
+                if (camera == null)
                 {
-                    action.Apply(camera);
-                    if (cameraSystem.CurrentCamera == camera)
-                    {
-                        break;
-                    }
+                    continue;
                 }
 
-                nextCameraIndex++;
+                var terminalBlock = terminalBlocks[index];
+                if (!terminalBlock.IsWorking)
+                {
+                    continue;
+                }
+
+                MyAPIGateway.Utilities.ShowNotification($"Selecting {index}: {terminalBlock.CustomName}");
+
+                if (lastActivatedCamera == current && lastActivatedBlock is IMyControllableEntity controllableEntity)
+                {
+                    // Exit from the previous block with camera (it is required for search lights and turrets, but not for cameras)
+                    controllableEntity.Use();
+                }
+
+                lastActivatedCamera = null;
+                lastActivatedBlock = null;
+
+                action.Apply(terminalBlock);
+
+                if (MySession.Static.CameraController == camera)
+                {
+                    lastActivatedCamera = camera;
+                    lastActivatedBlock = terminalBlock;
+                    MyAPIGateway.Utilities.ShowNotification($"Selected {index}: {terminalBlock.CustomName}");
+                }
+
+                break;
             }
         }
     }
