@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -59,20 +58,20 @@ namespace ClientPlugin
             il.RemoveRange(i, j - i);
 
             // Inject a static method call instead
-            var handleCameraGroupMethodInfo = AccessTools.DeclaredMethod(typeof(ActivatePatch), nameof(HandleCameraGroup));
+            var applyAction = AccessTools.DeclaredMethod(typeof(ActivatePatch), nameof(ApplyAction));
             il.Insert(i++, new CodeInstruction(OpCodes.Ldloc_2));
-            il.Insert(i, new CodeInstruction(OpCodes.Call, handleCameraGroupMethodInfo));
+            il.Insert(i, new CodeInstruction(OpCodes.Call, applyAction));
 
             il.RecordPatchedCode();
             return il;
         }
 
-        public static void HandleCameraGroup(List<MyTerminalBlock> terminalBlocks, ITerminalAction action)
+        public static void ApplyAction(List<MyTerminalBlock> terminalBlocks, ITerminalAction action)
         {
             // All cameras & action == View
             if (terminalBlocks.Count != 0 && 
                 terminalBlocks.All(block => block is IMyCameraBlock) &&
-                action.Name.ToString() == "View")
+                action.Id == "View")
             {
                 SelectNextCamera(terminalBlocks, action);
                 return;

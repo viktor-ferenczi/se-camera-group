@@ -6,9 +6,9 @@ using Sandbox.Game.Gui;
 
 namespace ClientPlugin
 {
-    [HarmonyPatch(typeof(MyCameraBlock))]
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [HarmonyPatch(typeof(MyCameraBlock))]
     public class MyCameraBlockPatch
     {
         [HarmonyPostfix]

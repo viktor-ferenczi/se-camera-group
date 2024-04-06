@@ -44,7 +44,7 @@ endfinally
 L3:
 ldloc.3
 ldloc.2
-call static System.Void ClientPlugin.ActivatePatch::HandleCameraGroup(System.Collections.Generic.List`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> terminalBlocks, Sandbox.ModAPI.Interfaces.ITerminalAction action)
+call static System.Void ClientPlugin.ActivatePatch::ApplyAction(System.Collections.Generic.List`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> terminalBlocks, Sandbox.ModAPI.Interfaces.ITerminalAction action)
 L8:
 ldc.i4.1
 ret
