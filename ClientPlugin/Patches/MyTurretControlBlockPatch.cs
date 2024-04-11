@@ -21,6 +21,7 @@ namespace ClientPlugin
             {
                 if (action is MyTerminalAction<MyTurretControlBlock> a && a.Id == "Control")
                 {
+                    // Enable this action for groups of blocks
                     a.ValidForGroups = true;
                 }
             }

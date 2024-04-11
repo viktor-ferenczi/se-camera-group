@@ -85,7 +85,7 @@ namespace ClientPlugin
                 return;
             }
 
-            // Original implementation from MyToolbarItemTerminalGroup.Activate
+            // Fall back to the original implementation from MyToolbarItemTerminalGroup.Activate
             foreach (var block in terminalBlocks)
             {
                 if (block != null && block.IsFunctional)
@@ -131,6 +131,10 @@ namespace ClientPlugin
             }
         }
 
+        // Records the last activated camera and the corresponding block.
+        // This is required in the cases when the plugin needs to exit from
+        // the previous camera (stop using it) before being able to select
+        // the next one.
         private static IMyCameraController lastActivatedCamera;
         private static MyTerminalBlock lastActivatedBlock;
 
@@ -152,36 +156,46 @@ namespace ClientPlugin
                 // Next block with wrap around
                 index = (index + 1) % cameras.Count;
 
+                // It must have a camera
                 var camera = cameras[index];
                 if (camera == null)
                 {
                     continue;
                 }
 
+                // It must be operational
                 var terminalBlock = terminalBlocks[index];
                 if (!terminalBlock.IsWorking)
                 {
                     continue;
                 }
 
+#if DEBUG
                 MyAPIGateway.Utilities.ShowNotification($"Selecting {index}: {terminalBlock.CustomName}");
+#endif
 
+                // Leave the last activated camera first, this is required for all blocks except of MyCameraBlock
                 if (lastActivatedCamera == current && lastActivatedBlock is IMyControllableEntity controllableEntity)
                 {
-                    // Exit from the previous block with camera (it is required for search lights and turrets, but not for cameras)
                     controllableEntity.Use();
                 }
 
+                // No camera is selected for use (player is back in the cockpit's view)
                 lastActivatedCamera = null;
                 lastActivatedBlock = null;
 
+                // View the camera or Control the block
                 action.Apply(terminalBlock);
 
+                // Check whether the camera has changed as expected
                 if (MySession.Static.CameraController == camera)
                 {
+                    // Record the active camera
                     lastActivatedCamera = camera;
                     lastActivatedBlock = terminalBlock;
-                    MyAPIGateway.Utilities.ShowNotification($"Selected {index}: {terminalBlock.CustomName}");
+
+                    // Notify the player
+                    MyAPIGateway.Utilities.ShowNotification($"{terminalBlock.CustomName}", 1000);
                 }
 
                 break;

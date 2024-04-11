@@ -21,6 +21,7 @@ namespace ClientPlugin
             {
                 if (action is MyTerminalAction<MyCameraBlock> a && a.Id == "View")
                 {
+                    // Enable this action for groups of blocks
                     a.ValidForGroups = true;
                 }
             }
