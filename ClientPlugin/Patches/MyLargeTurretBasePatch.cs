@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 
 namespace ClientPlugin
@@ -24,6 +25,13 @@ namespace ClientPlugin
                     a.ValidForGroups = true;
                 }
             }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(MethodType.Constructor)]
+        public static void ConstructorPostfix(ref MyToolbar ___m_toolbar)
+        {
+            ___m_toolbar = null;
         }
     }
 }
