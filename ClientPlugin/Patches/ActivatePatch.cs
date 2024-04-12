@@ -11,11 +11,11 @@ using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using Sandbox.ModAPI;
-using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.Entities.Blocks;
 using VRage.Game.ModAPI.Interfaces;
 using VRage.Utils;
 using IMyControllableEntity = Sandbox.Game.Entities.IMyControllableEntity;
+using ITerminalAction = Sandbox.ModAPI.Interfaces.ITerminalAction;
 
 namespace ClientPlugin
 {
@@ -194,8 +194,11 @@ namespace ClientPlugin
                     lastActivatedCamera = camera;
                     lastActivatedBlock = terminalBlock;
 
+                    // Show camera info on next update (here it is not reliable)
+                    Plugin.ShowCameraInfoLater(terminalBlock.CubeGrid.DisplayName, terminalBlock.CustomName.ToString());
+
                     // Notify the player
-                    MyAPIGateway.Utilities.ShowNotification($"{terminalBlock.CustomName}", 1000);
+                    MyAPIGateway.Utilities.ShowNotification($"{terminalBlock.CustomName}", 500);
                 }
 
                 break;

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using HarmonyLib;
+using Sandbox.Game.Gui;
 using Sandbox.Graphics.GUI;
 using VRage.FileSystem;
 using VRage.Plugins;
@@ -18,6 +19,9 @@ namespace ClientPlugin
 
         public static Plugin Instance { get; private set; }
         public static PersistentConfig<PluginConfig> Config;
+
+        private static string cameraInfoGridName;
+        private static string cameraInfoBlockName;
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         public void Init(object gameInstance)
@@ -47,6 +51,13 @@ namespace ClientPlugin
 
         public void Update()
         {
+            if (cameraInfoGridName == null)
+                return;
+
+            MyHud.CameraInfo.Enable(cameraInfoGridName, cameraInfoBlockName);
+
+            cameraInfoGridName = null;
+            cameraInfoBlockName = null;
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -60,5 +71,11 @@ namespace ClientPlugin
         {
 
         }*/
+
+        public static void ShowCameraInfoLater(string gridName, string blockName)
+        {
+            cameraInfoGridName = gridName;
+            cameraInfoBlockName = blockName;
+        }
     }
 }

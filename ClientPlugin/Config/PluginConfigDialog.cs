@@ -86,12 +86,12 @@ namespace ClientPlugin
             var size = new Vector2(0.5f, 0.3f);
             layoutTable = new MyLayoutTable(this, -0.5f * size, size);
             layoutTable.SetColumnWidths(60f, 940f);
-            layoutTable.SetRowHeights(200f, 60f, 250f, 150f);
+            layoutTable.SetRowHeights(200f, 60f, 200f, 150f);
 
             layoutTable.Add(disableThirdPersonViewCheckbox, MyAlignH.Left, MyAlignV.Center, 0, 0);
             layoutTable.Add(disableThirdPersonViewLabel, MyAlignH.Left, MyAlignV.Center, 0, 1);
 
-            layoutTable.Add(closeButton, MyAlignH.Right, MyAlignV.Center, 2, 0, colSpan: 2);
+            layoutTable.Add(closeButton, MyAlignH.Center, MyAlignV.Center, 2, 0, colSpan: 2);
         }
     }
 }

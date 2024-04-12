@@ -490,6 +490,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraInfo.cs" />
     <Compile Include="Config\IPluginConfig.cs" />
     <Compile Include="Config\PersistentConfig.cs" />
     <Compile Include="Config\PluginConfig.cs" />
