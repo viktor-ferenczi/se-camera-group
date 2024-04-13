@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using HarmonyLib;
 using Sandbox.Game.Gui;
+using Sandbox.Game.World;
 using Sandbox.Graphics.GUI;
 using VRage.FileSystem;
 using VRage.Plugins;
@@ -38,7 +39,7 @@ namespace ClientPlugin
 
         private static void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            PluginSession.OverrideEnableThirdPersonView();
+            OverrideEnableThirdPersonView();
         }
 
         public void Dispose()
@@ -51,13 +52,34 @@ namespace ClientPlugin
 
         public void Update()
         {
-            if (cameraInfoGridName == null)
+            if (cameraInfoGridName != null)
+            {
+                MyHud.CameraInfo.Enable(cameraInfoGridName, cameraInfoBlockName);
+
+                cameraInfoGridName = null;
+                cameraInfoBlockName = null;
+            }
+
+            if (MySession.Static != null && MySession.Static.GameplayFrameCounter % 60 == 0)
+            {
+                OverrideEnableThirdPersonView();
+            }
+        }
+
+        private static void OverrideEnableThirdPersonView()
+        {
+            if (MySession.Static?.Settings == null)
                 return;
 
-            MyHud.CameraInfo.Enable(cameraInfoGridName, cameraInfoBlockName);
+            if (MySession.Static.CameraController != null &&
+                MyGuiScreenGamePlay.Static != null &&
+                Config.Data.DisableThirdPersonView &&
+                !MySession.Static.CameraController.IsInFirstPersonView)
+            {
+                MyGuiScreenGamePlay.Static.SwitchCamera();
+            }
 
-            cameraInfoGridName = null;
-            cameraInfoBlockName = null;
+            MySession.Static.Settings.Enable3rdPersonView = PluginSession.OriginalEnable3rdPersonView && !Config.Data.DisableThirdPersonView;
         }
 
         // ReSharper disable once UnusedMember.Global

@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Sandbox.Game.Gui;
 using Sandbox.Game.World;
 using VRage.Game.Components;
 
@@ -10,31 +9,13 @@ namespace ClientPlugin
     [MySessionComponentDescriptor(MyUpdateOrder.NoUpdate)]
     public class PluginSession : MySessionComponentBase
     {
-        private static bool originalEnable3RdPersonView;
+        public static bool OriginalEnable3rdPersonView = true;
 
-        public override void LoadData()
+        public override void BeforeStart()
         {
-            base.LoadData();
+            base.BeforeStart();
 
-            originalEnable3RdPersonView = MySession.Static.Settings.Enable3rdPersonView;
-
-            OverrideEnableThirdPersonView();
-        }
-
-        public static void OverrideEnableThirdPersonView()
-        {
-            if (MySession.Static?.Settings == null)
-                return;
-
-            if (MySession.Static.CameraController != null &&
-                MyGuiScreenGamePlay.Static != null &&
-                Plugin.Config.Data.DisableThirdPersonView &&
-                !MySession.Static.CameraController.IsInFirstPersonView)
-            {
-                MyGuiScreenGamePlay.Static.SwitchCamera();
-            }
-
-            MySession.Static.Settings.Enable3rdPersonView = originalEnable3RdPersonView && !Plugin.Config.Data.DisableThirdPersonView;
+            OriginalEnable3rdPersonView = MySession.Static.Settings.Enable3rdPersonView;
         }
     }
 }
