@@ -497,7 +497,6 @@
     <Compile Include="Config\PluginConfigDialog.cs" />
     <Compile Include="Patches\ActivatePatch.cs" />
     <Compile Include="Patches\MyCameraBlockPatch.cs" />
-    <Compile Include="Patches\MyGuiScreenGamePlayPatch.cs" />
     <Compile Include="Patches\MyLargeTurretBasePatch.cs" />
     <Compile Include="Patches\MySearchlightPatch.cs" />
     <Compile Include="Patches\MyTurretControlBlockPatch.cs" />
