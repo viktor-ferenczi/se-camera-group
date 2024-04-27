@@ -9,6 +9,10 @@ experienced SE players.
 
 Thanks goes to **mkaito** for the great plugin idea, pair-working and testing.
 
+Please consider supporting my work on [Patreon](https://www.patreon.com/semods) or one time via [PayPal](https://www.paypal.com/paypalme/vferenczi/).
+
+*Thank you and enjoy!*
+
 ## Prerequisites
 
 - [Space Engineers](https://store.steampowered.com/app/244850/Space_Engineers/)
@@ -32,3 +36,8 @@ while the searchlight and turrets have a Control action. They cannot be mixed.
 - Game saves and blueprints preserve the toolbar actions configured
 - Only players with the plugin installed will be able to use the toolbar action
 - No adverse effect on server performance, this is only a client side QoL plugin
+
+## Want to know more?
+
+- [SE Mods Discord](https://discord.gg/PYPFPGf3Ca) FAQ, Troubleshooting, Support, Bug Reports, Discussion
+- [Plugin Loader Discord](https://discord.gg/6ETGRU3CzR) Everything about plugins
