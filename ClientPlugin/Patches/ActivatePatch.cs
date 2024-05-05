@@ -51,9 +51,9 @@ namespace ClientPlugin
 
             // Safety check
             var hash = il.GetCodeHash();
-            if (hash != "607700dc")
+            if (hash != "607700dc" && hash != "TBD")
             {
-                MyLog.Default.Warning($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed, not patching it");
+                MyLog.Default.Warning($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed, not patching it. Actual hash: {hash}");
                 return il;
             }
 
