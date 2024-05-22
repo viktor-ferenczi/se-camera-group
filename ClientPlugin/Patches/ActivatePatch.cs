@@ -17,7 +17,7 @@ using VRage.Utils;
 using IMyControllableEntity = Sandbox.Game.Entities.IMyControllableEntity;
 using ITerminalAction = Sandbox.ModAPI.Interfaces.ITerminalAction;
 
-namespace ClientPlugin
+namespace ClientPlugin.Patches
 {
     [HarmonyPatch]
     [SuppressMessage("ReSharper", "UnusedType.Global")]
@@ -44,53 +44,69 @@ namespace ClientPlugin
         }
 
         [HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> ActivateTranspiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> ActivateTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
         {
             var il = instructions.ToList();
             il.RecordOriginalCode();
 
             // Safety check
-            var hash = il.GetCodeHash();
-            if (hash != "607700dc" && hash != "TBD")
+            var actual = il.GetCodeHash();
+            const string expected = "f1c66542";
+            if (actual != expected)
             {
-                MyLog.Default.Warning($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed, not patching it. Actual hash: {hash}");
+                MyLog.Default.Warning($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed, not patching it. Expected hash: {expected}, actual hash: {actual}");
                 return il;
             }
 
-            // Entirely remove the second foreach loop, except of loading the list variable:
-            // foreach (MyTerminalBlock block in myTerminalBlockList)
-            var i = il.FindLastIndex(c => c.opcode == OpCodes.Ldloc_3) + 1;
-            var j = il.FindLastIndex(c => c.opcode == OpCodes.Ldc_I4_1);
-            il.RemoveRange(i, j - i);
+            // Static method to call to handle the view actions
+            var handleViewAction = AccessTools.DeclaredMethod(typeof(ActivatePatch), nameof(HandleViewAction));
 
-            // Inject a static method call instead
-            var applyAction = AccessTools.DeclaredMethod(typeof(ActivatePatch), nameof(ApplyAction));
+            // New label to skip the rest of the method, points to the "return true" statement
+            var skip = gen.DefineLabel();
+            il[il.Count - 2].labels.Add(skip);
+
+            // Inject a static method call after the first for loop which builds the list of actions.
+            // If the method returns true, then skip the rest of the method and return true.
+            // IMPORTANT: The original Ldloc_3 is kept in place and reused, because it has labels on it.
+            //            A new Ldloc_3 is inserted after the conditional jump.
+            var i = il.FindLastIndex(c => c.opcode == OpCodes.Ldloc_3) + 1;
             il.Insert(i++, new CodeInstruction(OpCodes.Ldloc_2));
-            il.Insert(i, new CodeInstruction(OpCodes.Call, applyAction));
+            il.Insert(i++, new CodeInstruction(OpCodes.Call, handleViewAction));
+            il.Insert(i++, new CodeInstruction(OpCodes.Brtrue, skip));
+            il.Insert(i, new CodeInstruction(OpCodes.Ldloc_3));
 
             il.RecordPatchedCode();
             return il;
         }
 
-        public static void ApplyAction(List<MyTerminalBlock> terminalBlocks, ITerminalAction action)
+        private static bool HandleViewAction(List<MyTerminalBlock> terminalBlocks, List<ITerminalAction> actions)
         {
-            // Is it a relevant action?
+#if DEBUG
+            MyLog.Default.Debug($"terminalBlocks.Count={terminalBlocks.Count}");
+            MyLog.Default.Debug($"actions.Count={actions.Count}");
+#endif
+
+            // Keep only the first View or Control action
+            var action = actions.FirstOrDefault(a => a.Id == "View" || a.Id == "Control");
+#if DEBUG
+            MyLog.Default.Debug($"action.Id={action?.Id ?? "null"}");
+#endif
+
             // All blocks in the group has a camera controller?
-            if (MySession.Static != null &&
-                (action.Id == "View" || action.Id == "Control") &&
-                terminalBlocks.Count != 0 &&
-                terminalBlocks.All(IsBlockWithCamera))
+            if (action != null &&
+                MySession.Static != null &&
+                terminalBlocks.Any())
             {
-                SelectNextCamera(terminalBlocks, action);
-                return;
+                var blocks = terminalBlocks.Where(b => b != null && b.IsFunctional && IsBlockWithCamera(b)).ToList();
+                if (blocks.Any())
+                {
+                    SelectNextCamera(blocks, action);
+                    return true;
+                }
             }
 
-            // Fall back to the original implementation from MyToolbarItemTerminalGroup.Activate
-            foreach (var block in terminalBlocks)
-            {
-                if (block != null && block.IsFunctional)
-                    action.Apply(block);
-            }
+            // Fall back to the original implementation
+            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

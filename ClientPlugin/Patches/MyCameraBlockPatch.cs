@@ -4,7 +4,7 @@ using HarmonyLib;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Gui;
 
-namespace ClientPlugin
+namespace ClientPlugin.Patches
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]

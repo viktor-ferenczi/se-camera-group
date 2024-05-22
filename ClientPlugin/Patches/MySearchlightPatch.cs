@@ -4,7 +4,7 @@ using HarmonyLib;
 using Sandbox.Game.Gui;
 using SpaceEngineers.Game.Entities.Blocks;
 
-namespace ClientPlugin
+namespace ClientPlugin.Patches
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
