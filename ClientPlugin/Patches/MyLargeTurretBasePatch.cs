@@ -5,7 +5,7 @@ using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 
-namespace ClientPlugin
+namespace ClientPlugin.Patches
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
