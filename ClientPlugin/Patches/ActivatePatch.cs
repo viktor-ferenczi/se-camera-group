@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -55,6 +56,12 @@ namespace ClientPlugin.Patches
             if (actual != expected)
             {
                 MyLog.Default.Warning($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed, not patching it. Expected hash: {expected}, actual hash: {actual}");
+                
+                if (Environment.GetEnvironmentVariable("SE_PLUGIN_THROW_ON_FAILED_METHOD_VERIFICATION") != null)
+                {
+                    throw new Exception("The code inside MyToolbarItemTerminalGroup.Activate method has changed");
+                }
+                
                 return il;
             }
 
