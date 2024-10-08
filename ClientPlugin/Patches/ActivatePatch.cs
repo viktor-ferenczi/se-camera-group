@@ -52,17 +52,11 @@ namespace ClientPlugin.Patches
 
             // Safety check
             var actual = il.GetCodeHash();
-            const string expected = "f1c66542";
+            const string expected = "f1c66542x";
             if (actual != expected)
             {
-                MyLog.Default.Warning($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed, not patching it. Expected hash: {expected}, actual hash: {actual}");
-                
-                if (Environment.GetEnvironmentVariable("SE_PLUGIN_THROW_ON_FAILED_METHOD_VERIFICATION") != null)
-                {
-                    throw new Exception("The code inside MyToolbarItemTerminalGroup.Activate method has changed");
-                }
-                
-                return il;
+                MyLog.Default.Error($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed. Expected hash: {expected}, actual hash: {actual}");
+                throw new Exception("Game code change detected");
             }
 
             // Static method to call to handle the view actions
