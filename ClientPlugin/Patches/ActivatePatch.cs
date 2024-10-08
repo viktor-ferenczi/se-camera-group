@@ -52,7 +52,7 @@ namespace ClientPlugin.Patches
 
             // Safety check
             var actual = il.GetCodeHash();
-            const string expected = "f1c66542x";
+            const string expected = "f1c66542";
             if (actual != expected)
             {
                 MyLog.Default.Error($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed. Expected hash: {expected}, actual hash: {actual}");
