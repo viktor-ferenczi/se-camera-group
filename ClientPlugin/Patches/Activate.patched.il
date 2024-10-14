@@ -1,4 +1,4 @@
-// 344f9ba7
+// 53d26e37
 ldarg.0
 call VRage.Collections.ListReader`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetBlocks()
 stloc.1
@@ -74,7 +74,10 @@ pop
 br.s L9
 L8:
 ldloc.s 6 (Sandbox.Game.Entities.Cube.MyTerminalBlock)
-callvirt abstract virtual System.Void Sandbox.Game.Gui.ITerminalAction::Apply(Sandbox.Game.Entities.Cube.MyTerminalBlock block)
+ldarg.0
+ldfld System.Collections.Generic.List`1<Sandbox.ModAPI.Ingame.TerminalActionParameter> Sandbox.Game.Screens.Helpers.MyToolbarItemActions::m_parameters
+call static VRage.Collections.ListReader`1<Sandbox.ModAPI.Ingame.TerminalActionParameter> VRage.Collections.ListReader`1<Sandbox.ModAPI.Ingame.TerminalActionParameter>::op_Implicit(System.Collections.Generic.List`1<Sandbox.ModAPI.Ingame.TerminalActionParameter> list)
+callvirt abstract virtual System.Void Sandbox.Game.Gui.ITerminalAction::Apply(Sandbox.Game.Entities.Cube.MyTerminalBlock block, VRage.Collections.ListReader`1<Sandbox.ModAPI.Ingame.TerminalActionParameter> parameters)
 L5:
 L6:
 L7:
