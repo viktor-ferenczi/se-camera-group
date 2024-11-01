@@ -51,8 +51,9 @@ namespace ClientPlugin.Patches
             il.RecordOriginalCode();
 
             // Safety check
+            var isOldDotNetFramework = Environment.Version.Major < 5;
             var actual = il.GetCodeHash();
-            const string expected = "65ab983a";
+            var expected = isOldDotNetFramework ? "65ab983a" : "9c483739";
             if (actual != expected)
             {
                 MyLog.Default.Error($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed. Expected hash: {expected}, actual hash: {actual}");
