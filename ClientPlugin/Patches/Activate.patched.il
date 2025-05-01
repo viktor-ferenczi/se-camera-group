@@ -1,15 +1,14 @@
-// 53d26e37
+// 557fc120
 ldarg.0
 call VRage.Collections.ListReader`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetBlocks()
 stloc.1
-ldarg.0
 ldarg.0
 ldloc.1
 ldloca.s 0 (System.Boolean)
 call VRage.Collections.ListReader`1<Sandbox.Game.Gui.ITerminalAction> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetActionsWithGenericDuplicates(VRage.Collections.ListReader`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> blocks, System.Boolean& genericType)
 ldarg.0
 call System.String Sandbox.Game.Screens.Helpers.MyToolbarItemActions::get_ActionId()
-call System.Collections.Generic.List`1<Sandbox.Game.Gui.ITerminalAction> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::FindActions(VRage.Collections.ListReader`1<Sandbox.Game.Gui.ITerminalAction> actions, System.String name)
+call static System.Collections.Generic.List`1<Sandbox.Game.Gui.ITerminalAction> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::FindActions(VRage.Collections.ListReader`1<Sandbox.Game.Gui.ITerminalAction> actions, System.String name)
 stloc.2
 ldloc.2
 brfalse.s L0
