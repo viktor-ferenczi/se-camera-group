@@ -1,4 +1,4 @@
-// 557fc120
+// 014911f6
 ldarg.0
 call VRage.Collections.ListReader`1<Sandbox.Game.Entities.Cube.MyTerminalBlock> Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetBlocks()
 stloc.1
@@ -63,10 +63,9 @@ brfalse.s L6
 ldloc.s 6 (Sandbox.Game.Entities.Cube.MyTerminalBlock)
 callvirt virtual System.Boolean Sandbox.Game.Entities.MyCubeBlock::get_IsFunctional()
 brfalse.s L7
-ldarg.0
 ldloc.2
 ldloc.s 6 (Sandbox.Game.Entities.Cube.MyTerminalBlock)
-call Sandbox.Game.Gui.ITerminalAction Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetMatchingGenericAction(System.Collections.Generic.List`1<Sandbox.Game.Gui.ITerminalAction> actions, VRage.Game.ModAPI.IMyCubeBlock block)
+call static Sandbox.Game.Gui.ITerminalAction Sandbox.Game.Screens.Helpers.MyToolbarItemTerminalGroup::GetMatchingGenericAction(System.Collections.Generic.List`1<Sandbox.Game.Gui.ITerminalAction> actions, VRage.Game.ModAPI.IMyCubeBlock block)
 dup
 brtrue.s L8
 pop
