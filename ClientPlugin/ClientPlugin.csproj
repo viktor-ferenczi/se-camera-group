@@ -502,7 +502,6 @@
     <Content Include="deploy.bat" />
     <Content Include="Patches\Activate.original.il" />
     <Content Include="Patches\Activate.patched.il" />
-    <Content Include="PluginHub.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
