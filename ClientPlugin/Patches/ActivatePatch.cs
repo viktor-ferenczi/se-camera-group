@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
+using ClientPlugin.Tools;
 using HarmonyLib;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
@@ -45,20 +46,15 @@ namespace ClientPlugin.Patches
         }
 
         [HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> ActivateTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
+        private static IEnumerable<CodeInstruction> ActivateTranspiler(IEnumerable<CodeInstruction> instructions, MethodBase patchedMethod, ILGenerator gen)
         {
             var il = instructions.ToList();
-            il.RecordOriginalCode();
+            il.RecordOriginalCode(patchedMethod);
 
             // Safety check
             var isOldDotNetFramework = Environment.Version.Major < 5;
-            var actual = il.GetCodeHash();
-            const string expected = "906d1dbe";
-            if (isOldDotNetFramework && actual != expected)
-            {
-                MyLog.Default.Error($"{Plugin.Name}: The code inside MyToolbarItemTerminalGroup.Activate method has changed. Expected hash: {expected}, actual hash: {actual}");
-                throw new Exception("Game code change detected");
-            }
+            if (isOldDotNetFramework)
+                il.VerifyCodeHash(patchedMethod, "906d1dbe");
 
             // Static method to call to handle the view actions
             var handleViewAction = AccessTools.DeclaredMethod(typeof(ActivatePatch), nameof(HandleViewAction));
@@ -77,7 +73,7 @@ namespace ClientPlugin.Patches
             il.Insert(i++, new CodeInstruction(OpCodes.Brtrue, skip));
             il.Insert(i, new CodeInstruction(OpCodes.Ldloc_3));
 
-            il.RecordPatchedCode();
+            il.RecordPatchedCode(patchedMethod);
             return il;
         }
 
