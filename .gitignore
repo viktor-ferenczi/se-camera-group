@@ -360,3 +360,6 @@ MigrationBackup/
 
 # JetBrains Rider project files
 /.idea/
+
+# IL dumps produced by TranspilerHelpers when debugging patches
+*.il

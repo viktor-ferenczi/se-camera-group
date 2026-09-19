@@ -500,8 +500,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="deploy.bat" />
-    <Content Include="Patches\Activate.original.il" />
-    <Content Include="Patches\Activate.patched.il" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
