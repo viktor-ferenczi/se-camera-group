@@ -21,7 +21,7 @@ General instructions:
 Project build configuration, building the project:
 - If you need to build the code, then invoke `dotnet build`.
 - Never run verbose builds because they give too much output. Use `Echo` instead print variable values from the build process as/if required.
-- In development this code is built by the `dotnet` command line tool or by an IDE like VSCode, JetBrains Rider or Visual Studio. Then the DLL produced by the build is deployed to Pulsar's `Local` plugin folder by the `Deploy.bat` script. 
+- In development this code is built by the `dotnet` command line tool or by an IDE like VSCode, JetBrains Rider or Visual Studio. The build deploys the DLL into Pulsar's `Local` plugin folder only if `Pulsar` is set in `Directory.Build.props.user` or passed as `-p:Pulsar=...`; otherwise the working copy is loaded through a Pulsar development folder.
 - In production this code is built by the Pulsar plugin loader directly on the player's machine.
 
 Runtime patching:

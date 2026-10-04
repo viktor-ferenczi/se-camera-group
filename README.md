@@ -37,6 +37,14 @@ while the searchlight and turrets have a Control action. They cannot be mixed.
 - Only players with the plugin installed will be able to use the toolbar action
 - No adverse effect on server performance, this is only a client side QoL plugin
 
+## Development
+
+Load the working copy through a Pulsar development folder: start Pulsar with `-sources`,
+then add this repository with the Sources button. Building `CameraGroup.sln` deploys the
+plugin into Pulsar's `Local` folder only if `Pulsar` is set in `Directory.Build.props.user`
+or passed as `-p:Pulsar=...`. If the build cannot find the game, run `setup.py` to write its
+folder into `Directory.Build.props.user`.
+
 ## Want to know more?
 
 - [SE Mods Discord](https://discord.gg/PYPFPGf3Ca) FAQ, Troubleshooting, Support, Bug Reports, Discussion
